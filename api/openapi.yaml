@@ -1,0 +1,660 @@
+openapi: 3.0.0
+info:
+  title: Burger API
+  description: Esta es la documentación del proyecto de Burger API
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/eliafg/BurgerAPI/1.0.0
+  description: SwaggerHub API Auto Mocking
+tags:
+- name: burgers
+  description: La hamburguesa y sus propiedades
+- name: review
+  description: La reseña de la hamburguesa
+- name: restaurant
+  description: El restaurante y sus hamburguesas
+paths:
+  /api/v1/{API_KEY}/burgers:
+    get:
+      tags:
+      - burgers
+      summary: Obtener todas las hamburguesas
+      description: |
+        Llamar este método devolverá todas las hamburguesas en forma de arreglo.
+      operationId: searchBurgers
+      parameters:
+      - name: API_KEY
+        in: path
+        description: La llave del API
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: quantity
+        in: query
+        description: Cantidad de hamburguesas a llamar
+        required: false
+        style: form
+        explode: true
+        schema:
+          maximum: 50
+          minimum: 0
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: Se devuelve el arreglo de hamburguesas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Burger'
+                x-content-type: application/json
+        "400":
+          description: Error.
+      x-swagger-router-controller: Burgers
+    post:
+      tags:
+      - burgers
+      summary: Agrega una nueva hamburguesa
+      description: Agrega una nueva hamburguesa a la base de datos
+      operationId: sendBurger
+      parameters:
+      - name: API_KEY
+        in: path
+        description: La llave del API
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: La hamburguesa y sus propiedades
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Burger'
+      responses:
+        "201":
+          description: Objeto dado de alta
+        "400":
+          description: ingreso inválido u objeto inválido
+        "409":
+          description: Un objeto con este identificador ya existe
+      x-swagger-router-controller: Burgers
+  /api/v1/{API_KEY}/burgers/{burgerId}:
+    get:
+      tags:
+      - burgers
+      summary: Obtener una única hamburguesa
+      description: |
+        Llamar este método devolverá una solo hamburguesa a partir del identificador
+      operationId: searchSingleBurger
+      parameters:
+      - name: API_KEY
+        in: path
+        description: La llave del API
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: burgerId
+        in: path
+        description: El identificador único de la hamburguesa
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Devuelve el objeto correspondiente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Burger'
+                x-content-type: application/json
+        "400":
+          description: Error.
+      x-swagger-router-controller: Burgers
+    put:
+      tags:
+      - burgers
+      summary: Editar una hamburguesa
+      description: |
+        Este método encontrará y editará la hamburguesa establecida por los parámetros.
+      operationId: editBurgers
+      parameters:
+      - name: API_KEY
+        in: path
+        description: La llave del API
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: burgerId
+        in: path
+        description: El identificador único de la hamburguesa
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: La hamburguesa y sus propiedades
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Burger'
+      responses:
+        "200":
+          description: Devuelve el objeto correspondiente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Burger'
+                x-content-type: application/json
+        "400":
+          description: Error.
+      x-swagger-router-controller: Burgers
+  /api/v1/{API_KEY}/restaurants:
+    get:
+      tags:
+      - restaurant
+      summary: Obtener todos los restaurantes
+      description: |
+        Devuelve todos los restaurantes de la base de datos.
+      operationId: searchRestaurants
+      parameters:
+      - name: quantity
+        in: query
+        description: número máximo de objetos a devolver
+        required: false
+        style: form
+        explode: true
+        schema:
+          maximum: 50
+          minimum: 0
+          type: integer
+          format: int32
+      - name: API_KEY
+        in: path
+        description: La llave del API
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Se devuelve exitosamente el resultado
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Restaurant'
+                x-content-type: application/json
+        "400":
+          description: bad input parameter
+      x-swagger-router-controller: Restaurant
+    post:
+      tags:
+      - restaurant
+      summary: Enviar un nuevo restaurante
+      description: |
+        Añade un restaurante a la base.
+      operationId: sendRestaurant
+      parameters:
+      - name: API_KEY
+        in: path
+        description: La llave del API
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Restaurant'
+      responses:
+        "200":
+          description: Restaurant dado de alta.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Restaurant'
+                x-content-type: application/json
+        "400":
+          description: Error.
+      x-swagger-router-controller: Restaurant
+  /api/v1/{API_KEY}/restaurants/{restaurantId}:
+    get:
+      tags:
+      - restaurant
+      summary: Obtener un solo restaurante por identificador
+      description: |
+        Este método obtiene un solo restaurante especificado por su identificador en los parámetros
+      operationId: searchSingleRestaurant
+      parameters:
+      - name: API_KEY
+        in: path
+        description: La llave del API
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: restaurantId
+        in: path
+        description: El identificador único del restaurante
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Resultado Exitoso.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Restaurant'
+                x-content-type: application/json
+        "400":
+          description: Error.
+      x-swagger-router-controller: Restaurant
+    put:
+      tags:
+      - restaurant
+      summary: Editar un restaurante
+      description: |
+        Encuentra y edita un restaurante perteneciente a la base de datos a partir de los parámetros empleados
+      operationId: editRestaurant
+      parameters:
+      - name: API_KEY
+        in: path
+        description: La llave del API
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: restaurantId
+        in: path
+        description: El identificador único de la hamburguesa
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Un Restaurante
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Restaurant'
+      responses:
+        "200":
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Restaurant'
+                x-content-type: application/json
+        "400":
+          description: bad input parameter
+      x-swagger-router-controller: Restaurant
+  /api/v1/{API_KEY}/reviews:
+    get:
+      tags:
+      - review
+      summary: Obtener todas las reseñas
+      description: |
+        Este método obtiene la cantidad de reseñas especificadas por los parámetros del request
+      operationId: searchReviews
+      parameters:
+      - name: quantity
+        in: query
+        description: Cantidad de hamburguesas a llamar
+        required: false
+        style: form
+        explode: true
+        schema:
+          maximum: 50
+          minimum: 0
+          type: integer
+          format: int32
+      - name: API_KEY
+        in: path
+        description: La llave del API
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Se devuelve el arreglo de reseñas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
+                x-content-type: application/json
+        "400":
+          description: Error
+      x-swagger-router-controller: Review
+    post:
+      tags:
+      - review
+      summary: Enviar una nueva reseña
+      description: |
+        Este método añade una reseña a la base.
+      operationId: sendReview
+      parameters:
+      - name: API_KEY
+        in: path
+        description: La llave del API
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Una reseña completa
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Review'
+      responses:
+        "200":
+          description: Resultado exitoso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
+                x-content-type: application/json
+        "400":
+          description: Error.
+      x-swagger-router-controller: Review
+  /api/v1/{API_KEY}/reviews/{reviewId}:
+    get:
+      tags:
+      - review
+      summary: Obtener una reseña por identificador
+      description: |
+        Se obtiene una entrada de reseña especificada por los parámetros.
+      operationId: searchSingleReview
+      parameters:
+      - name: API_KEY
+        in: path
+        description: La llave del API
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: reviewId
+        in: path
+        description: El identificador único de la reseña
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Resultado Exitoso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
+                x-content-type: application/json
+        "400":
+          description: Error.
+      x-swagger-router-controller: Review
+    put:
+      tags:
+      - review
+      summary: Editar una reseña
+      description: |
+        Se encuentra y edita una reseña para editar en la base.
+      operationId: editReview
+      parameters:
+      - name: API_KEY
+        in: path
+        description: La llave del API
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: reviewId
+        in: path
+        description: El identificador único de la hamburguesa
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Una reseña completa
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Review'
+      responses:
+        "200":
+          description: Resultado Exitoso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
+                x-content-type: application/json
+        "400":
+          description: Error.
+      x-swagger-router-controller: Review
+  /api/v1/{API_KEY}/reviews/latest:
+    get:
+      tags:
+      - review
+      summary: Obtener las últimas 10 reseñas
+      description: |
+        Se obtienen las últimas 10 reseñas por fecha de reseña
+      operationId: searchLatestReviews
+      parameters:
+      - name: API_KEY
+        in: path
+        description: La llave del API
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Resultado Exitoso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
+                x-content-type: application/json
+        "400":
+          description: Error.
+      x-swagger-router-controller: Review
+  /api/v1/{API_KEY}/reviews/{restaurantId}:
+    get:
+      tags:
+      - review
+      summary: Obtener todas las reseñas por restaurante
+      description: |
+        Se obtienen todas las reseñas de un restaurante en específico
+      operationId: searchReviewByRestaurant
+      parameters:
+      - name: API_KEY
+        in: path
+        description: La llave del API
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: restaurantId
+        in: path
+        description: El identificador único del restaurante
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Resultado Exitoso.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
+                x-content-type: application/json
+        "400":
+          description: Error.
+      x-swagger-router-controller: Review
+components:
+  schemas:
+    Burger:
+      required:
+      - burgerId
+      - meat
+      - name
+      - price
+      - restaurantId
+      - style
+      type: object
+      properties:
+        burgerId:
+          type: number
+          format: uuid
+          example: 234
+        name:
+          type: string
+          example: Hamburguesa Clásica
+        meat:
+          type: string
+          example: Carne
+        price:
+          minimum: 1
+          type: number
+        style:
+          type: string
+          example: Texana
+        restaurantId:
+          type: number
+          example: 55543
+      example:
+        price: 1.080082819046101150206595775671303272247314453125
+        name: Hamburguesa Clásica
+        meat: Carne
+        style: Texana
+        restaurantId: 55543
+        burgerId: 234
+    Review:
+      required:
+      - burger
+      - comment
+      - dateReviewed
+      - reviewId
+      - score
+      type: object
+      properties:
+        reviewId:
+          type: number
+          example: 55543
+        burger:
+          allOf:
+          - $ref: '#/components/schemas/Burger'
+        score:
+          maximum: 5
+          minimum: 0
+          type: number
+        comment:
+          type: string
+          example: "Esta hamburguesa presenta buen sabor, sin embargo, la manera en\
+            \ que fue preparada hace que el pan se vuela aguado"
+        dateReviewed:
+          type: string
+          format: date-time
+          example: 2016-08-29T09:12:33.001Z
+      example:
+        score: 0.400414095230505751032978878356516361236572265625
+        burger: ""
+        dateReviewed: 2016-08-29T09:12:33.001Z
+        comment: "Esta hamburguesa presenta buen sabor, sin embargo, la manera en\
+          \ que fue preparada hace que el pan se vuela aguado"
+        reviewId: 55543
+    Restaurant:
+      required:
+      - address
+      - burgers
+      - name
+      - restaurantId
+      type: object
+      properties:
+        restaurantId:
+          type: number
+          example: 55543
+        name:
+          type: string
+          example: Milnovecientos88
+        burgers:
+          minItems: 0
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/Burger'
+        address:
+          type: string
+          example: "C. Diez 545, Zona Centro, 22800 Ensenada, B.C."
+      example:
+        address: "C. Diez 545, Zona Centro, 22800 Ensenada, B.C."
+        name: Milnovecientos88
+        restaurantId: 55543
+        burgers:
+        - price: 1.080082819046101150206595775671303272247314453125
+          name: Hamburguesa Clásica
+          meat: Carne
+          style: Texana
+          restaurantId: 55543
+          burgerId: 234
+        - price: 1.080082819046101150206595775671303272247314453125
+          name: Hamburguesa Clásica
+          meat: Carne
+          style: Texana
+          restaurantId: 55543
+          burgerId: 234
