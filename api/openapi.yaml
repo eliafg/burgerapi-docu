@@ -586,7 +586,7 @@ components:
         burgerId: 234
     Review:
       required:
-      - burger
+      - burgerId
       - comment
       - dateReviewed
       - reviewId
@@ -596,9 +596,9 @@ components:
         reviewId:
           type: number
           example: 55543
-        burger:
-          allOf:
-          - $ref: '#/components/schemas/Burger'
+        burgerId:
+          type: number
+          example: 1
         score:
           maximum: 5
           minimum: 0
