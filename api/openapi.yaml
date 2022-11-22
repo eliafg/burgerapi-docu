@@ -4,7 +4,7 @@ info:
   description: Esta es la documentación del proyecto de Burger API
   version: 1.0.0
 servers:
-- url: https://virtserver.swaggerhub.com/eliafg/BurgerAPI/1.0.0
+- url: https://sdi-burgerapi-backend.herokuapp.com/
   description: SwaggerHub API Auto Mocking
 tags:
 - name: burgers
@@ -478,7 +478,7 @@ paths:
         "400":
           description: Error.
       x-swagger-router-controller: Review
-  /api/v1/{API_KEY}/reviews/latest:
+  /api/v1/{API_KEY/latestreviews:
     get:
       tags:
       - review
@@ -508,7 +508,7 @@ paths:
         "400":
           description: Error.
       x-swagger-router-controller: Review
-  /api/v1/{API_KEY}/reviews/{restaurantId}:
+  /api/v1/:API_KEY/reviews/restaurant/{restaurantId}:
     get:
       tags:
       - review
